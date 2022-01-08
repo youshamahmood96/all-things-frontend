@@ -1,0 +1,1 @@
+I will be storing absolutely everything about react I find useful for myself.
