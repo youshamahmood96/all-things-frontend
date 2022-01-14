@@ -1,8 +1,9 @@
-import PlayGround from "./Hooks/useMemo/playground"
+import HookUseCallBack from "./Hooks/useCallBack/HookUseCallBack"
+import HookUseMemo from "./Hooks/useMemo/HookUseMemo"
 
 const App = () => {
   return(
-    <PlayGround/>
+    <HookUseCallBack/>
   )
 }
 

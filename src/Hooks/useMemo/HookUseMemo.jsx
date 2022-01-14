@@ -1,5 +1,5 @@
 import {useState,useMemo, useEffect} from 'react'
-const PlayGround = () => {
+const HookUseMemo = () => {
   const [number,setNum] = useState(0)
   const [dark,setDark] = useState(false)
   const doubleNum = useMemo(() => slowFunc(number),[number])
@@ -25,4 +25,4 @@ const slowFunc = (num) => {
   for(let i=0;i<1000000000;i++){}
   return num*2
 }
-export default PlayGround
+export default HookUseMemo
