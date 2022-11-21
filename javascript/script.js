@@ -1,11 +1,14 @@
-const getTodo = (cb) => {
-  setTimeout(() => {
-    cb({ text: "Complete Code Example" });
-  }, 2000);
-};
-function display() {
-  const todo = getTodo((cb) => {
-    console.log(cb.text);
-  });
+length = 10;
+function func() {
+  console.log(this.length);
 }
-display();
+
+var obj = {
+  length: 5,
+  thisFunc: function (func) {
+    func();
+    arguments[0]();
+  },
+};
+
+obj.thisFunc(func, 3);

@@ -9,23 +9,25 @@ puppeteer:
 
 <!-- code_chunk_output -->
 
-- [Front-end interview preparation:](#front-end-interview-preparation)
-  - [Event delegation](#event-delegation)
-  - [Event bubbling](#event-bubbling)
-    - [event.target vs event.currentTarget:](#eventtarget-vs-eventcurrenttarget)
-  - [How `this` works in javascript](#how-this-works-in-javascript)
-  - [`null` vs `undefined` vs undeclared](#null-vs-undefined-vs-undeclared)
-  - [Closure](#closure)
-  - [Object Literals](#object-literals)
-  - [Module Pattern](#module-pattern)
-  - [Currying,arity and partial application](#curryingarity-and-partial-application)
-  - [Arrow function implicit return](#arrow-function-implicit-return)
-  - [call apply and bind](#call-apply-and-bind)
-  - [Famous `setTimeout` problem](#famous-settimeout-problem)
-  - [Spread operator](#spread-operator)
-  - [Array destrucutre tricks](#array-destrucutre-tricks)
-    - [Getting nth item from a nested array](#getting-nth-item-from-a-nested-array)
-  - [Asynchronous callbacks](#asynchronous-callbacks)
+- [Event delegation](#event-delegation)
+- [Event bubbling](#event-bubbling)
+  - [event.target vs event.currentTarget:](#eventtarget-vs-eventcurrenttarget)
+- [How `this` works in javascript](#how-this-works-in-javascript)
+- [`null` vs `undefined` vs undeclared](#null-vs-undefined-vs-undeclared)
+- [Closure](#closure)
+- [Object Literals](#object-literals)
+- [Module Pattern](#module-pattern)
+- [Currying,arity and partial application](#curryingarity-and-partial-application)
+- [Arrow function implicit return](#arrow-function-implicit-return)
+- [call apply and bind](#call-apply-and-bind)
+- [Famous `setTimeout` problem](#famous-settimeout-problem)
+- [Spread operator](#spread-operator)
+- [Array destrucutre tricks](#array-destrucutre-tricks)
+  - [Getting nth item from a nested array](#getting-nth-item-from-a-nested-array)
+- [Asynchronous callbacks](#asynchronous-callbacks)
+- [async await promises](#async-await-promises)
+- [Confusions](#confusions)
+  - [About `this`](#about-this)
 
 <!-- /code_chunk_output -->
 
@@ -268,3 +270,40 @@ async function display() {
   console.log(todo.text);
 }
 ```
+
+## async await promises
+
+NOTE: Any function having `async` keyword is a promise.
+
+```js
+async function display() {
+  return 10;
+}
+const result = display();
+console.log(result); // Promise { 10 }
+const result = await display();
+console.log(result); // 10
+```
+
+## Confusions
+
+### About `this`
+
+```js
+length = 10;
+function func() {
+  console.log(this.length);
+}
+
+var obj = {
+  length: 5,
+  thisFunc: function (func) {
+    func();
+    arguments[0]();
+  },
+};
+
+obj.thisFunc(func, 3);
+```
+
+why does this print 10 and 2?
