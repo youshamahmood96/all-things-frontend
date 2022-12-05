@@ -9,25 +9,27 @@ puppeteer:
 
 <!-- code_chunk_output -->
 
-- [Event delegation](#event-delegation)
-- [Event bubbling](#event-bubbling)
-  - [event.target vs event.currentTarget:](#eventtarget-vs-eventcurrenttarget)
-- [How `this` works in javascript](#how-this-works-in-javascript)
-- [`null` vs `undefined` vs undeclared](#null-vs-undefined-vs-undeclared)
-- [Closure](#closure)
-- [Object Literals](#object-literals)
-- [Module Pattern](#module-pattern)
-- [Currying,arity and partial application](#curryingarity-and-partial-application)
-- [Arrow function implicit return](#arrow-function-implicit-return)
-- [call apply and bind](#call-apply-and-bind)
-- [Famous `setTimeout` problem](#famous-settimeout-problem)
-- [Spread operator](#spread-operator)
-- [Array destrucutre tricks](#array-destrucutre-tricks)
-  - [Getting nth item from a nested array](#getting-nth-item-from-a-nested-array)
-- [Asynchronous callbacks](#asynchronous-callbacks)
-- [async await promises](#async-await-promises)
-- [Confusions](#confusions)
-  - [About `this`](#about-this)
+- [Front-end interview preparation:](#front-end-interview-preparation)
+  - [Event delegation](#event-delegation)
+  - [Event bubbling](#event-bubbling)
+    - [event.target vs event.currentTarget:](#eventtarget-vs-eventcurrenttarget)
+  - [How `this` works in javascript](#how-this-works-in-javascript)
+  - [Prototypal Inheritance](#prototypal-inheritance)
+  - [`null` vs `undefined` vs undeclared](#null-vs-undefined-vs-undeclared)
+  - [Closure](#closure)
+  - [Object Literals](#object-literals)
+  - [Module Pattern](#module-pattern)
+  - [Currying,arity and partial application](#curryingarity-and-partial-application)
+  - [Arrow function implicit return](#arrow-function-implicit-return)
+  - [call apply and bind](#call-apply-and-bind)
+  - [Famous `setTimeout` problem](#famous-settimeout-problem)
+  - [Spread operator](#spread-operator)
+  - [Array destrucutre tricks](#array-destrucutre-tricks)
+    - [Getting nth item from a nested array](#getting-nth-item-from-a-nested-array)
+  - [Asynchronous callbacks](#asynchronous-callbacks)
+  - [async await promises](#async-await-promises)
+  - [Confusions](#confusions)
+    - [About `this`](#about-this)
 
 <!-- /code_chunk_output -->
 
@@ -59,6 +61,58 @@ In `form.onclick` handler:
 ## How `this` works in javascript
 
 refer to [this medium article](https://codeburst.io/the-simple-rules-to-this-in-javascript-35d97f31bde3).
+
+- If `new` keyword is used while calling the function, `this` will be a brand new object. An example with a constructor funtion is shown below:
+
+```javascript
+function ConstructorFunction() {
+  console.log(this);
+  this.value = "hello";
+  console.log(this);
+}
+new ConstructorFunction();
+// --> logs {}
+// --> logs { value: 'hello' }
+```
+
+- If `call` , `apply` or `bind` is used, `this` will be the object passed as the first argument to `call`, `apply` or `bind`.
+
+```javascript
+function example() {
+  console.log(this);
+}
+example.call({ value: "hello" });
+// --> logs { value: 'hello' }
+```
+
+- If a function is called as a method of an object, `this` will be the object the method is called on.
+
+```javascript
+const obj = {
+  value: "hello",
+  example: function () {
+    console.log(this);
+  },
+};
+obj.example();
+// --> logs { value: 'hello', example: [Function: example] }
+```
+
+- If a function is invoked as a free function, `this` is the global object, in browser,it is `window`
+
+  ```javascript
+  function example() {
+    console.log(this);
+  }
+  example();
+  // --> logs window
+  ```
+
+## Prototypal Inheritance
+
+refer to [this paragraph from Kyle Simpson](https://www.quora.com/What-is-prototypal-inheritance/answer/Kyle-Simpson)
+
+In short, javascript `prototypal inheritance` is not `inheritance` in its default meaning (from OOP languages). It is more like `delegation` or `composition`.
 
 ## `null` vs `undefined` vs undeclared
 
@@ -306,4 +360,13 @@ var obj = {
 obj.thisFunc(func, 3);
 ```
 
-why does this print 10 and 2?
+Why does this print 10 and 2?
+
+Ok we know how it shows 10, lets come to 2.
+
+```javascript
+arguments[0]();
+```
+
+here, `arguments` array has 2 elements, `func` and `3`. So `arguments[0]` is `func`. when `argumentrs[0]()` is written, it just means that hey, take the `arguments` array, pick off the first element, and call it, whatever it is.
+Doing this, the parent of the first element becomes the `arguments` array, and not the `obj` object. So `this` becomes `arguments` array, and `this.length` becomes `2`.
