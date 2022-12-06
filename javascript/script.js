@@ -1,9 +1,20 @@
-function fn() {
-  console.log(this);
-  this.hello = 6;
+function curry(func) {
+  function _curry(...args) {
+    if (args.length >= func.length) {
+      return func(...args);
+    } else {
+      return function (...next) {
+        return _curry(...args, ...next);
+      };
+    }
+  }
+  return _curry;
 }
-var obj = {
-  value: 5,
-};
-var boundFn = fn.bind(obj);
-boundFn();
+function multiply(a, b, c) {
+  return a * b * c;
+}
+let curried = curry(multiply);
+console.log(curried(2)(3)(4));
+console.log(curried(2, 3)(4));
+console.log(curried(2, 3, 4));
+console.log(curried(5)(6, 7));

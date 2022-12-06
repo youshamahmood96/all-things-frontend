@@ -14,7 +14,7 @@ puppeteer:
   - [Event bubbling](#event-bubbling)
     - [event.target vs event.currentTarget:](#eventtarget-vs-eventcurrenttarget)
   - [How `this` works in javascript](#how-this-works-in-javascript)
-  - [Prototypal Inheritance](#prototypal-inheritance)
+  - [Prototypal vs Classical Inheritance](#prototypal-vs-classical-inheritance)
   - [`null` vs `undefined` vs undeclared](#null-vs-undefined-vs-undeclared)
   - [Closure](#closure)
   - [Object Literals](#object-literals)
@@ -108,11 +108,34 @@ obj.example();
   // --> logs window
   ```
 
-## Prototypal Inheritance
+## Prototypal vs Classical Inheritance
+
+refer to [this answer on stackoverflow](https://stackoverflow.com/questions/19633762/classical-inheritance-vs-prototypal-inheritance-in-javascript#:~:text=Classical%20inheritance%20is%20limited%20to,also%20objects%20inheriting%20from%20prototypes.).
+
+tldr:Classical inheritance is limited to classes inheriting from other classes. However prototypal inheritance includes not only prototypes inheriting from other prototypes but also objects inheriting from prototypes.
 
 refer to [this paragraph from Kyle Simpson](https://www.quora.com/What-is-prototypal-inheritance/answer/Kyle-Simpson)
 
 In short, javascript `prototypal inheritance` is not `inheritance` in its default meaning (from OOP languages). It is more like `delegation` or `composition`.
+
+`EDUCATIVE CHALLENGE:`
+
+```javascript
+function Human(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+function Man() {}
+
+function checker() {
+  const man = new Man("Yousha");
+  console.log(man.name);
+  console.log(man instanceof Human);
+}
+```
+
+Create `prototypal inheritance` from `Human` to `Man` so that, `checker` function logs `Yousha` and `true`.
 
 ## `null` vs `undefined` vs undeclared
 
