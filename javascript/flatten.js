@@ -1,37 +1,34 @@
-import { performance } from "perf_hooks";
+import { monitor } from "./monitor.js";
 
-export const flatten1 = (arr) => {
+const arr = [1, 2, [3, 4, [5, [7, 8], 6]]];
+
+export const recursiveFlat = (arr, depth = 1) => {
   const res = [];
-  const rec = () => {
+  const rec = (arr, depth) => {
     for (let i = 0; i < arr.length; i++) {
-      if (Array.isArray(arr[i])) {
-        rec(arr[i]);
+      if (Array.isArray(arr[i]) && depth > 0) {
+        rec(arr[i], depth - 1);
       } else {
         res.push(arr[i]);
       }
     }
   };
-  rec(arr);
+  rec(arr, depth);
   return res;
 };
-const flatten2 = (arr) => {
-  return arr.flat();
+
+const reduceFlat = (arr, d = 1) => {
+  return d > 0
+    ? arr.reduce(
+        (acc, val) =>
+          acc.concat(Array.isArray(val) ? reduceFlat(val, d - 1) : val),
+        []
+      )
+    : arr;
 };
-
-export const flatten3 = (arr) => arr.reduce((acc, val) => acc.concat(val), []);
-// let startRecursion = performance.now();
-// console.log(flatten1([1, [2, [3, 4, [6, 7], 5]]]));
-// let endRecursion = performance.now();
-// console.log(`Recursion took ${endRecursion - startRecursion} milliseconds`);
-
-// let startNativeMethod = performance.now();
-// console.log(flatten2([1, [2, [3, 4, [6, 7], 5]]]));
-// let endNativeMethod = performance.now();
-// console.log(
-//   `Native Method took ${endNativeMethod - startNativeMethod} milliseconds`
-// );
-
-// let startReduce = performance.now();
-// console.log(flatten3([1, [2, [3, 4, [6, 7], 5]]]));
-// let endReduce = performance.now();
-// console.log(`Reduce took ${endReduce - startReduce} milliseconds`);
+// const recursiveMonitor = monitor(recursiveFlat, arr);
+// const reduceMonitor = monitor(reduceFlat, arr);
+// const nativeFlatMonitor = monitor(Array.prototype.flat, arr);
+// console.log(recursiveMonitor);
+// console.log(reduceMonitor);
+// console.log(nativeFlatMonitor);
