@@ -1,20 +1,43 @@
-function curry(func) {
-  function _curry(...args) {
-    if (args.length >= func.length) {
-      return func(...args);
-    } else {
-      return function (...next) {
-        return _curry(...args, ...next);
-      };
-    }
-  }
-  return _curry;
-}
-function multiply(a, b, c) {
-  return a * b * c;
-}
-let curried = curry(multiply);
-console.log(curried(2)(3)(4));
-console.log(curried(2, 3)(4));
-console.log(curried(2, 3, 4));
-console.log(curried(5)(6, 7));
+import { flatten1, flatten3 } from "./flatten.js";
+import sort from "./sort.js";
+
+const arr = [7, 6, 8, 4, [2, 3, 9, [12, 7]]];
+
+const res1 = sort(flatten1(arr));
+
+// const res3 = sort(flatten3(arr));
+
+console.log(res1);
+// console.log(res3);
+
+// This is a JavaScript coding problem from BFE.dev
+// /**
+//  * @param { Array } arr
+//  * @param { number } depth
+//  * @returns { Array }
+//  */
+// function flat(arr, depth = 1) {
+//   const res = [];
+//   function _flat(depth) {
+//     for (let i = 0; i < arr.length; i++) {
+//       if (Array.isArray(arr[i]) && depth > 1) {
+//         _flat(depth - 1);
+//       } else {
+//         res.push(arr[i]);
+//       }
+//     }
+//   }
+//   _flat(depth);
+//   return res;
+// }
+
+// const arr = [1, [2], [3, [4]]];
+
+// console.log(flat(arr));
+// // [1, 2, 3, [4]]
+
+// flat(arr, 1);
+// // [1, 2, 3, [4]]
+
+// flat(arr, 2);
+// // [1, 2, 3, 4]
