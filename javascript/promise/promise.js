@@ -1,50 +1,49 @@
-class Promise {
+class CustomPromise {
+  _status = {
+    pending: "pending",
+    resolved: "resolved",
+    rejected: "rejected",
+  };
   constructor(handler) {
     this.value = null;
-    this.status = "pending";
-    this.onResolvedPromise = [];
-    this.onRejectedPromise = [];
-
-    const resolve = (value) => {
-      if (this.status === "pending") {
-        this.status = "resolved";
-        this.value = value;
-        this.onResolvedPromise.forEach((fn) => fn(value));
-      }
-    };
-    const reject = (value) => {
-      if (this.status === "pending") {
-        this.status = "rejected";
-        this.value = value;
-        this.onRejectedPromise.forEach((fn) => fn(value));
-      }
-    };
+    this.status = this._status.pending;
+    this.onResolvedPromises = [];
+    this.onRejectedPromises = [];
     try {
-      handler(resolve, reject);
+      handler(this.resolve, this.reject);
     } catch (error) {
-      reject(error);
+      this.reject(error);
     }
   }
-  then(onResolved, onRejected) {
-    if (this.status === "pending") {
-      this.onResolvedPromise.push(onResolved);
-      this.onRejectedPromise.push(onRejected);
+  resolve = (value) => {
+    if (this.status === this._status.pending) {
+      this.status = this._status.resolved;
+      this.value = value;
+      this.onResolvedPromises.forEach((fn) => fn(value));
     }
-    if (this.status === "resolved") {
-      onResolved(this.value);
+  };
+  reject = (value) => {
+    if (this.status === this._status.pending) {
+      this.status = this._status.rejected;
+      this.value = value;
+      this.onRejectedPromises.forEach((fn) => fn(value));
     }
-    if (this.status === "rejected") {
-      onRejected(this.value);
+  };
+  then = (onResolve, onReject) => {
+    if (this.status === this._status.pending) {
+      this.onResolvedPromises.push(onResolve);
+      this.onRejectedPromises.push(onReject);
     }
-  }
+    if (this.status === this._status.resolved) onResolve(this.value);
+    if (this.status === this._status.rejected) onReject(this.value);
+  };
 }
-
-const p1 = new Promise((resolve, reject) => {
+const p1 = new CustomPromise((resolve, reject) => {
   setTimeout(() => {
     resolve("resolved!");
   }, 1000);
 });
-const p2 = new Promise((resolve, reject) => {
+const p2 = new CustomPromise((resolve, reject) => {
   reject("rejected!");
 });
 p1.then(
