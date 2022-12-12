@@ -42,3 +42,5 @@ export const flatWithoutPrivateMethod = (arr, depth = 1) => {
 // console.log(recursiveMonitor);
 // console.log(reduceMonitor);
 // console.log(nativeFlatMonitor);
+
+// polyfill

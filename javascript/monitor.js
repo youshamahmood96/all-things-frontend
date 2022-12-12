@@ -1,8 +1,8 @@
 import { performance } from "perf_hooks";
 
-export const monitor = (fn, arg) => {
+export const monitor = (fn) => {
   const start = performance.now();
-  fn(arg);
+  fn();
   const end = performance.now();
-  return `${fn.name} took ${end - start} miliseconds`;
+  console.log(`${fn.name} took ${end - start} miliseconds`);
 };
