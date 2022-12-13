@@ -34,6 +34,7 @@ puppeteer:
   - [Interface vs Types](#interface-vs-types)
   - [Prototypes vs classes](#prototypes-vs-classes)
   - [Implements vs Extends](#implements-vs-extends)
+  - [Generics](#generics)
 
 <!-- /code_chunk_output -->
 
@@ -568,3 +569,16 @@ console.log(child.foo); // 'baz'
 **implements** means :
 
 **The new class** can be treated as the **same shape**, but it is not a child.
+
+When we override properties with `extends` , they are overridden permanently, whereas the method override saves a reference to the parent class.
+
+## Generics
+
+Way of static typing the dynamic types.
+
+```ts
+function identity<T>(arg: T): T {
+  return arg;
+}
+identity<string>("myString"); // type of output will be 'string'
+```

@@ -10,11 +10,9 @@ Promise.customAll = function (promises) {
       Promise.resolve(promises[i]).then(
         (res) => {
           result[i] = res;
-          if (i == promises.length - 1) resolve(result);
+          if (i === promises.length - 1) resolve(result);
         },
-        (err) => {
-          reject(err);
-        }
+        (err) => reject(err)
       );
     }
   });
