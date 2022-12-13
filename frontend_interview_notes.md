@@ -30,6 +30,10 @@ puppeteer:
   - [async await promises](#async-await-promises)
   - [Confusions](#confusions)
     - [About `this`](#about-this)
+  - [Why react components start with uppercase letters](#why-react-components-start-with-uppercase-letters)
+  - [Interface vs Types](#interface-vs-types)
+  - [Prototypes vs classes](#prototypes-vs-classes)
+  - [Implements vs Extends](#implements-vs-extends)
 
 <!-- /code_chunk_output -->
 
@@ -393,3 +397,174 @@ arguments[0]();
 
 here, `arguments` array has 2 elements, `func` and `3`. So `arguments[0]` is `func`. when `argumentrs[0]()` is written, it just means that hey, take the `arguments` array, pick off the first element, and call it, whatever it is.
 Doing this, the parent of the first element becomes the `arguments` array, and not the `obj` object. So `this` becomes `arguments` array, and `this.length` becomes `2`.
+
+## Why react components start with uppercase letters
+
+In JSX, lower-case tag names are considered to be HTML tags. However, lower-case tag names with a dot (property accessor) aren't.
+
+## Interface vs Types
+
+- Unlike an interface, the type alias can also be used for other types such as primitives, unions, and tuples.
+
+```ts
+// primitive
+type Name = string;
+
+// object
+type PartialPointX = { x: number };
+type PartialPointY = { y: number };
+
+// union
+type PartialPoint = PartialPointX | PartialPointY;
+
+// tuple
+type Data = [number, string];
+```
+
+- A class can implement an interface or type alias, both in the same exact way. Note however that a class and interface are considered static blueprints. Therefore, they can not implement / extend a type alias that names a union type.
+
+```ts
+2019 Update
+The current answers and the official documentation are outdated. And for those new to TypeScript, the terminology used isn't clear without examples. Below is a list of up-to-date differences.
+
+1. Objects / Functions
+Both can be used to describe the shape of an object or a function signature. But the syntax differs.
+
+Interface
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface SetPoint {
+  (x: number, y: number): void;
+}
+Type alias
+
+type Point = {
+  x: number;
+  y: number;
+};
+
+type SetPoint = (x: number, y: number) => void;
+2. Other Types
+Unlike an interface, the type alias can also be used for other types such as primitives, unions, and tuples.
+
+// primitive
+type Name = string;
+
+// object
+type PartialPointX = { x: number; };
+type PartialPointY = { y: number; };
+
+// union
+type PartialPoint = PartialPointX | PartialPointY;
+
+// tuple
+type Data = [number, string];
+3. Extend
+Both can be extended, but again, the syntax differs. Additionally, note that an interface and type alias are not mutually exclusive. An interface can extend a type alias, and vice versa.
+
+Interface extends interface
+
+interface PartialPointX { x: number; }
+interface Point extends PartialPointX { y: number; }
+Type alias extends type alias
+
+type PartialPointX = { x: number; };
+type Point = PartialPointX & { y: number; };
+Interface extends type alias
+
+type PartialPointX = { x: number; };
+interface Point extends PartialPointX { y: number; }
+Type alias extends interface
+
+interface PartialPointX { x: number; }
+type Point = PartialPointX & { y: number; };
+4. Implements
+A class can implement an interface or type alias, both in the same exact way. Note however that a class and interface are considered static blueprints. Therefore, they can not implement / extend a type alias that names a union type.
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+class SomePoint implements Point {
+  x = 1;
+  y = 2;
+}
+
+type Point2 = {
+  x: number;
+  y: number;
+};
+
+class SomePoint2 implements Point2 {
+  x = 1;
+  y = 2;
+}
+
+type PartialPoint = { x: number; } | { y: number; };
+
+// FIXME: can not implement a union type
+class SomePartialPoint implements PartialPoint {
+  x = 1;
+  y = 2;
+}
+```
+
+- Unlike a type alias, an interface can be defined multiple times, and will be treated as a single interface (with members of all declarations being merged).
+
+```ts
+interface Point {
+  x: number;
+}
+interface Point {
+  y: number;
+}
+
+const point: Point = { x: 1, y: 2 };
+```
+
+## Prototypes vs classes
+
+The most important difference between class- and prototype-based inheritance is that a class defines a type which can be instantiated at runtime, whereas a prototype is itself an object instance.
+
+A child of an ES6 class is another type definition which extends the parent with new properties and methods, which in turn can be instantiated at runtime. A child of a prototype is another object instance which delegates to the parent any properties that aren’t implemented on the child.
+
+Side note: You might be wondering why I mentioned class methods, but not prototype methods. That’s because JavaScript doesn’t have a concept of methods. Functions are first-class in JavaScript, and they can have properties or be properties of other objects.
+
+To put a really fine point on that, a child of a prototype isn’t a copy of its prototype, nor is it an object with the same shape as its prototype. The child has a living reference to the prototype, and any prototype property that doesn’t exist on the child is a one-way reference to a property of the same name on the prototype.
+
+```js
+let parent = { foo: "foo" };
+let child = {};
+Object.setPrototypeOf(child, parent);
+
+console.log(child.foo); // 'foo'
+
+child.foo = "bar";
+
+console.log(child.foo); // 'bar'
+
+console.log(parent.foo); // 'foo'
+
+delete child.foo;
+
+console.log(child.foo); // 'foo'
+
+parent.foo = "baz";
+
+console.log(child.foo); // 'baz'
+```
+
+## Implements vs Extends
+
+**extends** means :
+
+**The new class is a child**. It gets benefits coming with inheritance. It has all the properties and methods of its parent. It can override some of these and implement new ones, but the parent stuff is already included.
+
+**implements** means :
+
+**The new class** can be treated as the **same shape**, but it is not a child.
