@@ -35,6 +35,9 @@ puppeteer:
   - [Prototypes vs classes](#prototypes-vs-classes)
   - [Implements vs Extends](#implements-vs-extends)
   - [Generics](#generics)
+  - [Arrow Functions vs Regular Functions](#arrow-functions-vs-regular-functions)
+  - [Promises](#promises)
+  - [Scoping](#scoping)
 
 <!-- /code_chunk_output -->
 
@@ -581,4 +584,106 @@ function identity<T>(arg: T): T {
   return arg;
 }
 identity<string>("myString"); // type of output will be 'string'
+```
+
+## Arrow Functions vs Regular Functions
+
+[refer to this article](https://dmitripavlutin.com/differences-between-arrow-and-regular-functions/#1-this-value)
+
+## Promises
+
+- Always `return` from `.then()` to maintain the chain, otherwise the next `.then()` will be called with `undefined` as the value.
+
+```js
+Promise.resolve(1)
+  .then((val) => {
+    // val = 1
+    console.log(val); // LOGS 1
+    return val + 1; // return 2
+  })
+  .then((val) => {
+    // val = 2
+    console.log(val); // LOGS 2
+  })
+  .then((val) => {
+    console.log(val); // LOGS undefined
+  });
+```
+
+- You can only pass functions as a parameter to `Promise.resolve.then`
+
+```js
+Promise.resolve(1) // 1 inside a promise object
+  .then(() => 2) // 2 is returned without reading 1, so now console.log will print 2
+  .then(3) // will throw error, as we cannot pass an integer to a .then()
+  .then((value) => value * 3) // here, the value is still 2, as the previous .then() threw an error
+  .then(Promise.resolve(4)) // creates a pending promise
+  .then(console.log); // logs 6
+```
+
+- `promise.prototype.finally` doesnt accept any arguments
+
+```js
+// This is a JavaScript Quiz from BFE.dev
+
+Promise.resolve(1)
+  .then((val) => {
+    // val = 1
+    console.log(val); // LOGS 1
+    return val + 1; // 2
+  })
+
+  .finally((val) => {
+    console.log(val); // undefined
+    return 10;
+  });
+```
+
+## Scoping
+
+```js
+const obj = {
+  dev: "bfe",
+  a: function () {
+    return this.dev;
+  },
+  b() {
+    return this.dev;
+  },
+  c: () => {
+    return this.dev;
+  },
+  d: function () {
+    return (() => {
+      return this.dev;
+    })();
+  },
+  e: function () {
+    return this.b();
+  },
+  f: function () {
+    return this.b;
+  },
+  g: function () {
+    return this.c();
+  },
+  h: function () {
+    return this.c;
+  },
+  i: function () {
+    return () => {
+      return this.dev;
+    };
+  },
+};
+
+console.log(obj.a()); // bfe
+console.log(obj.b()); // bfe
+console.log(obj.c()); // TypeError
+console.log(obj.d()); // bfe
+console.log(obj.e()); // bfe
+console.log(obj.f()()); // TypeError
+console.log(obj.g()); // TypeError
+console.log(obj.h()()); // TypeError
+console.log(obj.i()()); // bfe
 ```

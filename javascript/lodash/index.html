@@ -7,12 +7,9 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Event Capturing Example</h1>
-    <div id="Box">
-      <div id="Box2">
-        <button id="myButton">Click Me!</button>
-      </div>
-    </div>
+    <input type="text" onchange="processChanges()" />
+    <button onclick="processChanges()">Click me</button>
   </body>
-  <script src="./test.js"></script>
+  <script src="./debounce.js"></script>
+  <script src="./throttle.js"></script>
 </html>

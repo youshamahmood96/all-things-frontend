@@ -1,12 +1,12 @@
-const test = (a, b, c) => {
-  return a + b + c;
-};
+// This is a JavaScript Quiz from BFE.dev
 
-const curried = curry(test);
-
-curried(1)(2, 3);
-curried(1)(2)(3);
-curried(1, 2)(3);
-curried(1, 2, 3);
-
-const curry = (fn) => {};
+console.log(Boolean("false")); // true
+console.log(Boolean(false)); //false
+console.log("3" + 1); // 31
+console.log("3" - 1); //
+console.log("3" - " 02 ");
+console.log("3" * " 02 ");
+console.log(Number("1"));
+console.log(Number("number"));
+console.log(Number(null));
+console.log(Number(false));
