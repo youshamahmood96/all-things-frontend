@@ -43,12 +43,16 @@ puppeteer:
   - [Demistifying `null`](#demistifying-null)
   - [Equality operator behaviors](#equality-operator-behaviors)
   - [Implicit coercion](#implicit-coercion)
-    - [Non-numeric values in numeric expressions](#non-numeric-values-in-numeric-expressions)
       - [String](#string)
         - [Case for `+` operator](#case-for--operator)
       - [Object](#object)
       - [Array Object](#array-object)
       - [True, False and ""](#true-false-and-)
+  - [Operator precedence](#operator-precedence)
+  - [Types...](#types)
+    - [`null` is not an `Object`](#null-is-not-an-object)
+    - [`Number` object vs `number` primitive](#number-object-vs-number-primitive)
+    - [Calling new Number() is not the same as calling Number()](#calling-new-number-is-not-the-same-as-calling-number)
 
 <!-- /code_chunk_output -->
 
@@ -767,8 +771,6 @@ console.log(" 1     " == true); //true
 
 ## Implicit coercion
 
-### Non-numeric values in numeric expressions
-
 #### String
 
 Whenever you pass a string as an operand in a numeric expression involving either of these operators: `-, \*, /, %,` the number's conversion process is similar to calling the in-built Number function on the value. This is pretty straightforward, any string containing only numeric characters will be converted to it's number equivalent, but a string containing a non-numeric character returns NaN. Illustrated below,
@@ -844,4 +846,55 @@ Number(""); // 0
 3 * false; // 0
 3 * ""; // 0
 3 + ""; // "3"
+```
+
+## Operator precedence
+
+```js
+console.log((0 == 1) == 2); // false
+console.log((2 == 1) == 0); // true
+console.log(0 < 1 < 2); // true
+console.log(1 < 2 < 3); //true
+console.log(2 > 1 > 0); // true
+console.log(3 > 2 > 1); // false
+```
+
+## Types...
+
+```js
+console.log(typeof null); // object
+console.log(null instanceof Object); // false
+console.log(typeof 1); // number
+console.log(1 instanceof Number); // false
+console.log(1 instanceof Object); // false
+console.log(typeof Number(1)); // number
+console.log(new Number(1) instanceof Object); // true
+console.log(typeof true); //boolean
+console.log(true instanceof Boolean); // false
+console.log(true instanceof Object); // false
+console.log(Boolean(true) instanceof Object); // false
+console.log(new Boolean(true) instanceof Object); //true
+console.log([] instanceof Array); // true
+console.log([] instanceof Object); // true
+console.log((() => {}) instanceof Object); //true
+```
+
+### `null` is not an `Object`
+
+`null` is not an `Object`. Although `typeof null` returns `object`, it is a bug in javascript.
+
+``
+
+### `Number` object vs `number` primitive
+
+`Number` is a javascript object containing a few usefule methods such as `toFixed()` , `valueOf()` etc., and `number` is a primitive type.
+
+### Calling new Number() is not the same as calling Number()
+
+`Number()` is a function that converts a value to a number, while `new Number()` is a constructor that creates a Number object.
+
+```js
+const test = new Number(1);
+console.log(typeof test); // object
+console.log(typeof Number(1)); // number
 ```
