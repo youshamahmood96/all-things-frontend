@@ -38,6 +38,17 @@ puppeteer:
   - [Arrow Functions vs Regular Functions](#arrow-functions-vs-regular-functions)
   - [Promises](#promises)
   - [Scoping](#scoping)
+  - [Using operators on string](#using-operators-on-string)
+  - [Javascript falsy values](#javascript-falsy-values)
+  - [Demistifying `null`](#demistifying-null)
+  - [Equality operator behaviors](#equality-operator-behaviors)
+  - [Implicit coercion](#implicit-coercion)
+    - [Non-numeric values in numeric expressions](#non-numeric-values-in-numeric-expressions)
+      - [String](#string)
+        - [Case for `+` operator](#case-for--operator)
+      - [Object](#object)
+      - [Array Object](#array-object)
+      - [True, False and ""](#true-false-and-)
 
 <!-- /code_chunk_output -->
 
@@ -686,4 +697,151 @@ console.log(obj.f()()); // TypeError
 console.log(obj.g()); // TypeError
 console.log(obj.h()()); // TypeError
 console.log(obj.i()()); // bfe
+```
+
+## Using operators on string
+
+```js
+console.log("3" + 1); // 31
+console.log("3" - 1); // 2
+```
+
+In the first example, `+` operator is used to concatenate the string and number. In the second example, `-` operator is used to subtract the number from the string, which javascript does by converting the string to a number.
+
+## Javascript falsy values
+
+A falsy (sometimes written falsey) value is a value that is considered false when encountered in a Boolean context.
+
+JavaScript uses type conversion to coerce any value to a Boolean in contexts that require it, such as conditionals and loops.
+
+javascript falsy values are:
+∏
+
+- false
+- 0
+- -0
+- 0n
+- "", '', ``
+- null
+- undefined
+- NaN
+- document.all
+
+## Demistifying `null`
+
+main question is, why
+
+```js
+null >= 0; // true
+```
+
+but:
+
+```js
+null == 0; // false
+```
+
+What really happens is, relational (i.e `>=`) operators use type coercion (`toPrimitive`) with a hint type of Number, actually all the relational operators have this behavior.
+
+**Note:** Equality operators will convert anything that is empty to 0. (i.e `'',[]` etc)
+
+But `==` operator, coerces `null` to `undefined`
+
+```js
+null == null; // true
+null == undefined; // true
+```
+
+## Equality operator behaviors
+
+```js
+console.log(0 == false); // true
+console.log("" == false); // true
+console.log([] == false); //true
+console.log(undefined == false); //false
+console.log(null == false); // false
+console.log("1" == true); // true
+console.log(1n == true); // true
+console.log(" 1     " == true); //true
+```
+
+## Implicit coercion
+
+### Non-numeric values in numeric expressions
+
+#### String
+
+Whenever you pass a string as an operand in a numeric expression involving either of these operators: `-, \*, /, %,` the number's conversion process is similar to calling the in-built Number function on the value. This is pretty straightforward, any string containing only numeric characters will be converted to it's number equivalent, but a string containing a non-numeric character returns NaN. Illustrated below,
+
+```js
+3 * "3"; // 3 * 3
+3 * Number("3"); // 3 * 3
+Number("5"); // 5
+
+Number("1."); // 1
+Number("1.34"); // 1.34
+Number("0"); // 0
+Number("012"); // 12
+
+Number("1,"); // NaN
+Number("1+1"); // NaN
+Number("1a"); // NaN
+Number("one"); // NaN
+Number("text"); // NaN
+```
+
+##### Case for `+` operator
+
+The + operator unlike other mathematical operators, performs two functions:
+
+1. Mathematical addition
+2. String concatenation
+
+When a string is an operand of the + operator, Javascript instead of converting the string to a Number, converts the number to a string.
+
+```js
+// concatenation
+1 + "2"; // "12"
+1 + "js"; // "1js"
+
+// addition
+1 + 2; // 3
+1 + 2 + 1; // 4
+
+//addition, then concatenation
+1 + 2 + "1"; // "31"
+1 + 2 + "1"; // "31"
+
+//concatenation all through
+1 + "2" + 1; // "121"
+1 + "2" + 1; // "121"
+```
+
+#### Object
+
+Most Javascript Object conversions usually result in [object Object], For example
+
+```js
+"name" + {}; // "name[object Object]
+```
+
+Javascript objects run `toString()` method in mathematical expressions.
+
+Every javascript Object inherits a toString method, that is called whenever an Object is to be converted to a string. The return value of the toString method is used for such operations as string concatenation and mathematical expressions.
+
+#### Array Object
+
+The inherited `toString` method of Arrays work abit differently, it works in a way similar to calling the `join` method of an array without any arguments.
+
+#### True, False and ""
+
+```js
+Number(true); // 1
+Number(false); // 0
+Number(""); // 0
+
+4 + true; // 5
+3 * false; // 0
+3 * ""; // 0
+3 + ""; // "3"
 ```
