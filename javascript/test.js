@@ -1,12 +1,8 @@
-// This is a JavaScript Quiz from BFE.dev
+const foo = {};
+foo.toString(); // [object Object]
 
-console.log(Boolean("false")); // true
-console.log(Boolean(false)); //false
-console.log("3" + 1); // 31
-console.log("3" - 1); //
-console.log("3" - " 02 ");
-console.log("3" * " 02 ");
-console.log(Number("1"));
-console.log(Number("number"));
-console.log(Number(null));
-console.log(Number(false));
+const baz = {
+  toString: () => "I'm object baz",
+};
+
+console.log(baz + "!"); //
