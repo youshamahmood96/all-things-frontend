@@ -11,6 +11,8 @@ puppeteer:
 
 - [Why react components start with uppercase letters](#why-react-components-start-with-uppercase-letters)
 - [When react app re-renders?](#when-react-app-re-renders)
+- [Why would we use `useCallback()`?](#why-would-we-use-usecallback)
+  - [Use cases:](#use-cases)
 
 <!-- /code_chunk_output -->
 
@@ -32,3 +34,15 @@ Points to note:
 - A component doesnt re-render when its `props` change. It re-renders following the first note.
 
 [see this article for understanding this better and learn about `React.memo`](https://www.joshwcomeau.com/react/why-react-re-renders/)
+
+## Why would we use `useCallback()`?
+
+_Refer to this [link](https://dmitripavlutin.com/react-usecallback/)_
+
+### Use cases:
+
+1. A functional component wrapped inside React.memo() accepts a function object prop
+
+2. When the function object is a dependency to other hooks, e.g. useEffect(..., [callback])
+
+3. When the function has some internal state, e.g. when the function is debounced or throttled.

@@ -80,8 +80,7 @@ Array.prototype.csort = function () {
 };
 
 Array.prototype.mergesort = function () {
-  const half = this.length / 2;
-  const merge = (left, right) => {
+  const _merge = (left, right) => {
     const res = [];
     while (left.length && right.length) {
       if (left[0] < right[0]) res.push(left.shift());
@@ -89,9 +88,13 @@ Array.prototype.mergesort = function () {
     }
     return [...res, ...left, ...right];
   };
-  if (this.length < 2) return this;
-  const left = this.splice(0, half);
-  return merge(this.mergesort(left), this.mergesort(this));
+  const _recursive = (arr) => {
+    if (arr.length < 2) return arr;
+    const half = arr.length / 2;
+    const left = arr.splice(0, half);
+    return _merge(_recursive(left), _recursive(arr));
+  };
+  return _recursive(this);
 };
 const arr = [7, 6, 2, 1, 4, 3, 6];
 const nativeSort = () => {
@@ -106,4 +109,4 @@ const mergeSort = () => {
 };
 monitor(nativeSort);
 monitor(customSort);
-monitor(mergeSort);
+console.log(mergeSort());
