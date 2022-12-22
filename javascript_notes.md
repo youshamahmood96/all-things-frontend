@@ -9,54 +9,56 @@ puppeteer:
 
 <!-- code_chunk_output -->
 
-- [{Java+Type}script Notes:](#javatypescript-notes)
-  - [Event delegation](#event-delegation)
-  - [Event bubbling](#event-bubbling)
-    - [event.target vs event.currentTarget:](#eventtarget-vs-eventcurrenttarget)
+- [Event delegation](#event-delegation)
+- [Event bubbling](#event-bubbling)
+  - [event.target vs event.currentTarget:](#eventtarget-vs-eventcurrenttarget)
+- [All things `this`](#all-things-this)
   - [How `this` works in javascript](#how-this-works-in-javascript)
-  - [Prototypal vs Classical Inheritance](#prototypal-vs-classical-inheritance)
-  - [`null` vs `undefined` vs undeclared](#null-vs-undefined-vs-undeclared)
-  - [Closure](#closure)
-  - [Object Literals](#object-literals)
-  - [Module Pattern](#module-pattern)
-  - [Currying,arity and partial application](#curryingarity-and-partial-application)
-  - [Arrow function implicit return](#arrow-function-implicit-return)
-  - [call apply and bind](#call-apply-and-bind)
-  - [Famous `setTimeout` problem](#famous-settimeout-problem)
-  - [Spread operator](#spread-operator)
-  - [All things array](#all-things-array)
-    - [Array reduce trivia](#array-reduce-trivia)
-    - [Getting nth item from an array in a nested object](#getting-nth-item-from-an-array-in-a-nested-object)
-    - [Difference between `push` and `concat`](#difference-between-push-and-concat)
-  - [Asynchronous callbacks](#asynchronous-callbacks)
-  - [async await promises](#async-await-promises)
-  - [Confusions](#confusions)
-    - [About `this`](#about-this)
-  - [Interface vs Types](#interface-vs-types)
-  - [Prototypes vs classes](#prototypes-vs-classes)
-  - [Implements vs Extends](#implements-vs-extends)
-  - [Generics](#generics)
-  - [Arrow Functions vs Regular Functions](#arrow-functions-vs-regular-functions)
-  - [Promises](#promises)
-  - [Scoping](#scoping)
-  - [Using operators on string](#using-operators-on-string)
-  - [Javascript falsy values](#javascript-falsy-values)
-  - [Demistifying `null`](#demistifying-null)
-  - [Equality operator behaviors](#equality-operator-behaviors)
-  - [Implicit coercion](#implicit-coercion)
-      - [String](#string)
-        - [Case for `+` operator](#case-for--operator)
-      - [Object](#object)
-      - [Array Object](#array-object)
-      - [True, False and ""](#true-false-and-)
-  - [Operator precedence](#operator-precedence)
-  - [Types...](#types)
-    - [`null` is not an `Object`](#null-is-not-an-object)
-    - [`Number` object vs `number` primitive](#number-object-vs-number-primitive)
-    - [Calling new Number() is not the same as calling Number()](#calling-new-number-is-not-the-same-as-calling-number)
-  - [Weird parseInt()](#weird-parseint)
-  - [Promise Executor](#promise-executor)
-  - [Cancel an api request in javascript](#cancel-an-api-request-in-javascript)
+  - [Random trivia](#random-trivia)
+  - [`this` in IIFE](#this-in-iife)
+- [Prototypal vs Classical Inheritance](#prototypal-vs-classical-inheritance)
+- [`null` vs `undefined` vs undeclared](#null-vs-undefined-vs-undeclared)
+- [Closure](#closure)
+- [Object Literals](#object-literals)
+- [Module Pattern](#module-pattern)
+- [Currying,arity and partial application](#curryingarity-and-partial-application)
+- [Arrow function implicit return](#arrow-function-implicit-return)
+- [call apply and bind](#call-apply-and-bind)
+- [Famous `setTimeout` problem](#famous-settimeout-problem)
+- [Spread operator](#spread-operator)
+- [All things array](#all-things-array)
+  - [Array reduce trivia](#array-reduce-trivia)
+  - [Getting nth item from an array in a nested object](#getting-nth-item-from-an-array-in-a-nested-object)
+  - [Difference between `push` and `concat`](#difference-between-push-and-concat)
+  - [Empty items in array](#empty-items-in-array)
+  - [Modifying `array.length` property](#modifying-arraylength-property)
+- [Asynchronous callbacks](#asynchronous-callbacks)
+- [async await promises](#async-await-promises)
+- [Interface vs Types](#interface-vs-types)
+- [Prototypes vs classes](#prototypes-vs-classes)
+- [Implements vs Extends](#implements-vs-extends)
+- [Generics](#generics)
+- [Arrow Functions vs Regular Functions](#arrow-functions-vs-regular-functions)
+- [Promises](#promises)
+- [Scoping](#scoping)
+- [Using operators on string](#using-operators-on-string)
+- [Javascript falsy values](#javascript-falsy-values)
+- [Demistifying `null`](#demistifying-null)
+- [Equality operator behaviors](#equality-operator-behaviors)
+- [Implicit coercion](#implicit-coercion)
+    - [String](#string)
+      - [Case for `+` operator](#case-for-operator)
+    - [Object](#object)
+    - [Array Object](#array-object)
+    - [True, False and ""](#true-false-and)
+- [Operator precedence](#operator-precedence)
+- [Types...](#types)
+  - [`null` is not an `Object`](#null-is-not-an-object)
+  - [`Number` object vs `number` primitive](#number-object-vs-number-primitive)
+  - [Calling new Number() is not the same as calling Number()](#calling-new-number-is-not-the-same-as-calling-number)
+- [Weird parseInt()](#weird-parseint)
+- [Promise Executor](#promise-executor)
+- [Cancel an api request in javascript](#cancel-an-api-request-in-javascript)
 
 <!-- /code_chunk_output -->
 
@@ -85,7 +87,9 @@ In `form.onclick` handler:
 - `event.currentTarget` is the `<form>` element.
 - `event.target` is the actual element inside the form that was clicked.
 
-## How `this` works in javascript
+## All things `this`
+
+### How `this` works in javascript
 
 refer to [this medium article](https://codeburst.io/the-simple-rules-to-this-in-javascript-35d97f31bde3).
 
@@ -134,6 +138,64 @@ obj.example();
   example();
   // --> logs window
   ```
+
+### Random trivia
+
+```js
+length = 10;
+function func() {
+  console.log(this.length);
+}
+
+var obj = {
+  length: 5,
+  thisFunc: function (func) {
+    func();
+    arguments[0]();
+  },
+};
+
+obj.thisFunc(func, 3);
+```
+
+Why does this print 10 and 2?
+
+Ok we know how it shows 10, lets come to 2.
+
+```javascript
+arguments[0]();
+```
+
+here, `arguments` array has 2 elements, `func` and `3`. So `arguments[0]` is `func`. when `argumentrs[0]()` is written, it just means that hey, take the `arguments` array, pick off the first element, and call it, whatever it is.
+Doing this, the parent of the first element becomes the `arguments` array, and not the `obj` object. So `this` becomes `arguments` array, and `this.length` becomes `2`.
+
+### `this` in IIFE
+
+Consider the following example:
+
+```js
+var a = {};
+var b = {};
+a.hello = function () {
+  console.log(this);
+};
+b.hello = a.hello;
+```
+
+In most programming languages, b.hello() would print a since they base this on where the function is. The function is in a, so this is a. Makes sense, right?
+
+However, JavaScript is a bit different in that regard. Instead of where it is, it's based on how it was called. b.hello() calls hello on b, thus this is set to b. This also makes sense since JavaScript doesn't really have a concept of "where" a function is (unlike methods in, say, Java, which are always tied to a specific class), and it's hard to determine that a is where it "is".
+
+So, foo.bar() will always set this to foo for the purposes of this call to bar (unless one has used bind or similar to bind this to a specific value in advance).
+
+Now, an IIFE is invoked on... nothing, really. It's not a foo.bar() situation, it's just a bar() where bar is your function expression. In cases like this where there's no foo, it defaults to the window object.
+
+There are two simple workarounds:
+
+1. Create a variable outside the IIFE containing the value you´re interested in: var that = this; and use that instead of this in the IIFE, or
+2. Bind the this value: (function(){ CODE GOES HERE }).bind(this)();
+
+**NOTE:** `call(), apply(), bind()` doesnt work on `IIFE`
 
 ## Prototypal vs Classical Inheritance
 
@@ -349,6 +411,27 @@ function returnNthCat(n) {
 
 `push` mutates the original array and return the length of the new array, `concat` returns a new array with the concated element.
 
+### Empty items in array
+
+```js
+const arr = [0];
+arr[3] = 3;
+console.log(arr); // [0, <2 empty items>, 3]
+
+for (let item of arr) {
+  console.log(item); // 0, undefined, undefined, 3
+}
+arr.map((item) => console.log(item)); // 0,3
+```
+
+This happens because `array.map()` doesnt run its callback function on empty items.
+
+Same goes for `array.forEach()`
+
+### Modifying `array.length` property
+
+If we modify the `array.length` property, it will actually change the length of the array and make the rest of the items `undefined`
+
 ## Asynchronous callbacks
 
 This will print `undefined`
@@ -415,38 +498,6 @@ console.log(result); // Promise { 10 }
 const result = await display();
 console.log(result); // 10
 ```
-
-## Confusions
-
-### About `this`
-
-```js
-length = 10;
-function func() {
-  console.log(this.length);
-}
-
-var obj = {
-  length: 5,
-  thisFunc: function (func) {
-    func();
-    arguments[0]();
-  },
-};
-
-obj.thisFunc(func, 3);
-```
-
-Why does this print 10 and 2?
-
-Ok we know how it shows 10, lets come to 2.
-
-```javascript
-arguments[0]();
-```
-
-here, `arguments` array has 2 elements, `func` and `3`. So `arguments[0]` is `func`. when `argumentrs[0]()` is written, it just means that hey, take the `arguments` array, pick off the first element, and call it, whatever it is.
-Doing this, the parent of the first element becomes the `arguments` array, and not the `obj` object. So `this` becomes `arguments` array, and `this.length` becomes `2`.
 
 ## Interface vs Types
 
