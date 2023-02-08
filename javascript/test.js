@@ -1,21 +1,15 @@
-// This is a JavaScript Quiz from BFE.dev
-
-// console.log(0 == "0");
-// console.log(0 === "0");
-// console.log(Object.is(0, false));
-
-// console.log(0 == 0);
-// console.log(0 === 0);
-// console.log(Object.is(0, 0));
-
-// console.log(0 == -0);
-// console.log(0 === -0);
-// console.log(Object.is(0, -0));
-
-console.log(NaN == NaN);
-console.log(NaN === NaN);
-console.log(Object.is(NaN, NaN));
-
-// console.log(0 == false);
-// console.log(0 === false);
-// console.log(Object.is(0, false));
+const persons = [
+  {
+    name: "Sumit",
+    age: 37,
+  },
+  {
+    name: "Saad",
+    age: 23,
+  },
+  {
+    name: "Akash",
+    age: 22,
+  },
+];
+console.log(persons.reduce((total, person) => total + person));

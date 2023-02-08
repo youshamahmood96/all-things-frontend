@@ -1,14 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import MadeUseStateMyself from './Hooks/useState/MadeUseStateMyself';
+import React from "react";
+import ReactDOM from "react-dom";
+import Hello from "./Hello";
+import MadeUseStateMyself from "./Hooks/useState/MadeUseStateMyself";
 
 ReactDOM.render(
-    <React.StrictMode>
-      <MadeUseStateMyself/>
-    </React.StrictMode>,
-    // <React.StrictMode>
-    //   <App/>
-    // </React.StrictMode>,
-  document.getElementById('root')
+  <React.StrictMode>
+    <Hello />
+  </React.StrictMode>,
+  // <React.StrictMode>
+  //   <App/>
+  // </React.StrictMode>,
+  document.getElementById("root")
 );
-
