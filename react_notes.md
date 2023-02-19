@@ -59,7 +59,7 @@ _Refer to this [link](https://dmitripavlutin.com/react-usecallback/)_
 
 Component composition is the name for passing components as props to other components, thus creating new components with other components.
 
-[https://felixgerschau.com/react-component-composition/](Read this article)
+[Read the longer version here](https://felixgerschau.com/react-component-composition/)
 
 ### How can composition can be used to avoid prop drilling?
 
