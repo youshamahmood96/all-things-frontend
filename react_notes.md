@@ -21,6 +21,7 @@ puppeteer:
     - [How can composition help perfomance?](#how-can-composition-help-perfomance)
       - [Without composition](#without-composition)
       - [With composition](#with-composition)
+  - [How to debounce and throttle callbacks](#how-to-debounce-and-throttle-callbacks)
 
 <!-- /code_chunk_output -->
 
@@ -172,3 +173,7 @@ const Post = () => {
 ```
 
 `<Post/>` will only render once, `<PostLayout/>` will rerender everytime `progress` changes.
+
+## How to debounce and throttle callbacks
+
+[Refer to this article](https://dmitripavlutin.com/react-throttle-debounce/#2-debouncing-a-callback-the-first-attempt)
