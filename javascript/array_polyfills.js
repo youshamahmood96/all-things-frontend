@@ -96,17 +96,42 @@ Array.prototype.mergesort = function () {
   };
   return _recursive(this);
 };
-const arr = [7, 6, 2, 1, 4, 3, 6];
-const nativeSort = () => {
-  return arr.sort((a, b) => a - b);
+Array.prototype.customMap = function (callback) {
+  const res = [];
+  for (let i = 0; i < this.length; i++) {
+    const curr = callback(this[i], i);
+    res.push(curr);
+  }
+  return res;
 };
 
-const customSort = () => {
-  return arr.csort();
+Array.prototype.customReduce = function (callback, initialValue) {
+  let acc;
+  if (!initialValue) {
+    acc = this[0];
+  } else {
+    acc = initialValue;
+  }
+  for (let i = !initialValue ? 1 : 0; i < this.length; i++) {
+    acc = callback(acc, this[i]);
+  }
+  return acc;
 };
-const mergeSort = () => {
-  return arr.mergesort();
-};
-monitor(nativeSort);
-monitor(customSort);
-console.log(mergeSort());
+const arr = [7, 6, 2, 1, 4, 3, 6];
+// const nativeSort = () => {
+//   return arr.sort((a, b) => a - b);
+// };
+
+// const customSort = () => {
+//   return arr.csort();
+// };
+// const mergeSort = () => {
+//   return arr.mergesort();
+// };
+// monitor(nativeSort);
+// monitor(customSort);
+// console.log(mergeSort());
+
+// console.log(arr.customMap((val, idx) => val + idx));
+
+console.log(arr.customReduce((acc, val) => acc + val, 500));
