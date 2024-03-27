@@ -93,7 +93,8 @@ In `form.onclick` handler:
 
 ### How `this` works in javascript
 
-refer to [this medium article](https://codeburst.io/the-simple-rules-to-this-in-javascript-35d97f31bde3).
+refer to [this medium article](https://dmitripavlutin.com/gentle-explanation-of-this-in-javascript/).
+solve [these 7 questions](https://dmitripavlutin.com/javascript-this-interview-questions/)
 
 - If `new` keyword is used while calling the function, `this` will be a brand new object. An example with a constructor funtion is shown below:
 
